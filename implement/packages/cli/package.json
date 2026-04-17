@@ -1,0 +1,13 @@
+{
+  "name": "@i-am-ios/cli",
+  "version": "2.0.0",
+  "description": "I-AM-IOS command-line interface",
+  "type": "module",
+  "bin": {
+    "iamios": "./iamios.js"
+  },
+  "files": ["iamios.js"],
+  "keywords": ["i-am-ios", "cli", "sovereign"],
+  "engines": { "node": ">=18.0.0" },
+  "license": "MIT"
+}

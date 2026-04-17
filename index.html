@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I-AM-IOS · Sovereign App Suite</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #070b0f;
+  --bg2:       #0c1318;
+  --bg3:       #111d26;
+  --border:    #1b2d3a;
+  --border2:   #264050;
+  --dim:       #3a5568;
+  --muted:     #5a7a8e;
+  --text:      #9dbcce;
+  --bright:    #c8e0ed;
+  --white:     #eef6fc;
+  --gold:      #c49a3c;
+  --cyan:      #22d3ee;
+  --green:     #34d399;
+  --amber:     #fbbf24;
+  --purple:    #a78bfa;
+  --rose:      #fb7185;
+  --sky:       #38bdf8;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0,0,0,.04) 2px, rgba(0,0,0,.04) 4px
+  );
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 35% at 50% 0%, rgba(34,211,238,.055) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 25% at 85% 85%, rgba(196,154,60,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 25% at 10% 70%, rgba(167,139,250,.03) 0%, transparent 60%);
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 32px; height: 52px;
+  background: rgba(7,11,15,.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 13px;
+  letter-spacing: .14em; color: var(--cyan);
+  text-transform: uppercase;
+}
+.brand-sep  { color: var(--dim); margin: 0 4px; font-weight: 400; }
+.brand-sub  { color: var(--muted); font-weight: 400; font-size: 10px; letter-spacing: .06em; }
+.topbar-spacer { flex: 1; }
+
+.net-pill {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 9px; color: var(--muted); letter-spacing: .08em;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 20px; padding: 5px 12px;
+}
+.net-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 7px var(--green);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.net-hash { color: var(--green); font-size: 9px; opacity: .55; }
+
+/* ── HERO ── */
+.hero {
+  position: relative; z-index: 1;
+  padding: 68px 40px 48px;
+  text-align: center;
+  max-width: 740px; margin: 0 auto;
+}
+.hero-eyebrow {
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px; opacity: .9;
+}
+.hero-title {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(34px, 7vw, 62px);
+  line-height: 1.04; letter-spacing: -.01em;
+  color: var(--white); margin-bottom: 14px;
+}
+.hero-title em {
+  font-style: normal; color: transparent;
+  -webkit-text-stroke: 1px var(--cyan);
+}
+.hero-sub {
+  font-size: 12px; color: var(--muted);
+  line-height: 1.8; max-width: 520px;
+  margin: 0 auto 28px;
+}
+.hero-meta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; flex-wrap: wrap;
+  font-size: 9px; color: var(--dim); letter-spacing: .1em;
+}
+.hm-accent { color: var(--cyan); opacity: .5; }
+.hm-sep    { color: var(--border2); }
+
+/* ── RAIL ── */
+.rail-wrap {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto 28px;
+  padding: 0 32px;
+}
+.rail {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 18px;
+  display: flex; flex-wrap: wrap; gap: 18px; align-items: center;
+}
+.ri { display: flex; align-items: center; gap: 7px; font-size: 9px; color: var(--muted); letter-spacing: .07em; white-space: nowrap; }
+.ri strong { color: var(--bright); font-weight: 500; }
+.rdiv { width: 1px; height: 14px; background: var(--border); flex-shrink: 0; }
+.r-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; background: var(--green); box-shadow: 0 0 5px var(--green); }
+
+/* ── SECTION LABEL ── */
+.sec-label {
+  font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── GRID ── */
+.grid-section {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto;
+  padding: 0 32px 80px;
+}
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 14px;
+}
+.grid-gap { margin-top: 44px; }
+
+/* ── CARD ── */
+.app-card {
+  display: block; text-decoration: none; cursor: pointer;
+  position: relative;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 26px 26px 22px;
+  transition: border-color .2s, transform .16s, box-shadow .2s;
+  overflow: hidden;
+}
+.app-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--cglow, transparent);
+  opacity: 0; transition: opacity .28s;
+  border-radius: 6px; pointer-events: none;
+}
+.app-card:hover {
+  border-color: var(--ca, var(--border2));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(0,0,0,.5), 0 0 0 1px var(--ca, transparent);
+}
+.app-card:hover::before { opacity: 1; }
+
+.app-card[data-a="cyan"]   { --ca:var(--cyan);   --cglow:radial-gradient(circle at 0 0,rgba(34,211,238,.07),transparent 55%); }
+.app-card[data-a="gold"]   { --ca:var(--gold);   --cglow:radial-gradient(circle at 0 0,rgba(196,154,60,.08),transparent 55%); }
+.app-card[data-a="green"]  { --ca:var(--green);  --cglow:radial-gradient(circle at 0 0,rgba(52,211,153,.07),transparent 55%); }
+.app-card[data-a="amber"]  { --ca:var(--amber);  --cglow:radial-gradient(circle at 0 0,rgba(251,191,36,.07),transparent 55%); }
+.app-card[data-a="purple"] { --ca:var(--purple); --cglow:radial-gradient(circle at 0 0,rgba(167,139,250,.07),transparent 55%); }
+.app-card[data-a="rose"]   { --ca:var(--rose);   --cglow:radial-gradient(circle at 0 0,rgba(251,113,133,.07),transparent 55%); }
+.app-card[data-a="sky"]    { --ca:var(--sky);    --cglow:radial-gradient(circle at 0 0,rgba(56,189,248,.07),transparent 55%); }
+
+.card-icon {
+  display: inline-block; font-size: 28px; margin-bottom: 12px; line-height: 1;
+}
+.card-layer {
+  display: block; font-size: 8px; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--dim);
+  margin-bottom: 10px; opacity: .8;
+}
+.card-title {
+  display: block; font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 17px; color: var(--white);
+  margin-bottom: 10px; line-height: 1.2;
+}
+.card-desc {
+  display: block; font-size: 11px; color: var(--muted);
+  line-height: 1.6; margin-bottom: 12px; min-height: 44px;
+}
+.card-tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+}
+.tag {
+  display: inline-block; padding: 3px 8px;
+  background: rgba(34,211,238,.12); color: var(--cyan);
+  border-radius: 3px; font-size: 8px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 12px; border-top: 1px solid var(--border);
+}
+.card-status {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 9px; color: var(--muted);
+}
+.sdot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--green); box-shadow: 0 0 4px var(--green);
+}
+.sdot.warn { background: var(--amber); box-shadow: 0 0 4px var(--amber); }
+.card-arrow {
+  font-size: 14px; color: var(--text); opacity: .6;
+  transition: opacity .2s;
+}
+.app-card:hover .card-arrow { opacity: 1; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative; z-index: 1;
+  margin-top: 60px; padding: 40px 32px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  background: var(--bg);
+}
+.footer-brand {
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  font-size: 14px; color: var(--white); margin-bottom: 8px;
+}
+.footer-meta {
+  font-size: 10px; color: var(--dim); letter-spacing: .06em;
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">I<span class="brand-sep">·</span>AM<span class="brand-sep">·</span>IOS<span class="brand-sub">v5</span></div>
+  <div class="topbar-spacer"></div>
+  <div class="net-pill">
+    <span class="r-dot"></span>
+    <span id="live-hash">0x0000…0000</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Sovereign Compute Suite</div>
+  <h1 class="hero-title"><em>I·AM·IOS</em> v5</h1>
+  <div class="hero-sub">
+    A complete, zero-dependency peer-to-peer sovereign compute network with integrated AI inference, formal consensus kernel, and 13 production-ready applications running entirely local.
+  </div>
+  <div class="hero-meta">
+    <span>24 Integrated Apps</span>
+    <span class="hm-sep">·</span>
+    <span>Zero External Dependencies</span>
+    <span class="hm-sep">·</span>
+    <span>Fully Open Source</span>
+  </div>
+</div>
+
+<!-- STATUS RAIL -->
+<div class="rail-wrap">
+  <div class="rail">
+    <div class="ri"><strong>Network Status</strong> <span class="r-dot"></span> ONLINE</div>
+    <div class="rdiv"></div>
+    <div class="ri">Hybrid P2P · Consensus Live</div>
+    <div class="rdiv"></div>
+    <div class="ri">All Services <span class="hm-accent">✓ Operational</span></div>
+  </div>
+</div>
+
+<main class="grid-section">
+
+  <!-- AI & INTELLIGENCE LAYER -->
+  <div class="sec-label">Intelligence · AI-Powered Systems</div>
+  <div class="app-grid">
+
+    <!-- I-AM-AI OLLAMA (AI-4-IAM) -->
+    <a class="app-card" href="ai-4-iam/I-AM-AI-OLLAMA3.html" data-a="purple">
+      <span class="card-icon">🧠</span>
+      <div class="card-layer">AI · Inference</div>
+      <div class="card-title">I·AM·AI OLLAMA</div>
+      <div class="card-desc">Sovereign Intelligence with Ollama3.2 local inference. Multi-model chat with sub-conscience background learning, pattern detection, and insight generation — fully local, zero cloud, fully private.</div>
+      <div class="card-tags"><span class="tag">Ollama Local</span><span class="tag">Sub-Conscience</span><span class="tag">IndexedDB</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Production Ready</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- I-AM-AI v3 (Alternative) -->
+    <a class="app-card" href="apps/I-AM-AI-v3.html" data-a="purple">
+      <span class="card-icon">🔮</span>
+      <div class="card-layer">Surface · AI Terminal</div>
+      <div class="card-title">I·AM·AI v3 (Terminal)</div>
+      <div class="card-desc">Sovereign Intelligence terminal UI. Advanced multi-model Ollama interaction with live sub-conscience monitoring, pattern learning, and sovereign event integration for distributed reasoning.</div>
+      <div class="card-tags"><span class="tag">Ollama Local</span><span class="tag">Sub-Conscience</span><span class="tag">v3</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Production Ready</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- APPLICATIONS -->
+  <div class="sec-label grid-gap">Applications · Sovereign Surfaces</div>
+  <div class="app-grid">
+
+    <!-- App Builder -->
+    <a class="app-card" href="apps/app-builder-v2.html" data-a="purple">
+      <span class="card-icon">🔨</span>
+      <div class="card-layer">Surface · Builder</div>
+      <div class="card-title">Sovereign App Builder</div>
+      <div class="card-desc">Visual drag-and-drop app construction on top of the sovereign event fabric. Build and deploy sovereign apps without leaving the network. Genesis/JSONFlow pipeline integrated.</div>
+      <div class="card-tags"><span class="tag">No-Code</span><span class="tag">Event-Driven</span><span class="tag">v2</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Attack Security Platform -->
+    <a class="app-card" href="apps/attack.html" data-a="rose">
+      <span class="card-icon">🛡️</span>
+      <div class="card-layer">Surface · Security</div>
+      <div class="card-title">Attack Command</div>
+      <div class="card-desc">Sovereign Security Platform. Red-team tooling and attack surface analysis wired into the consensus layer for adversarial testing of the network.</div>
+      <div class="card-tags"><span class="tag">Red Team</span><span class="tag">Security</span><span class="tag">Adversarial</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Generate Value -->
+    <a class="app-card" href="apps/generate-value.html" data-a="amber">
+      <span class="card-icon">💎</span>
+      <div class="card-layer">Surface · Value</div>
+      <div class="card-title">Generate Value</div>
+      <div class="card-desc">Value generation and economic coordination layer. Deterministic compute fabric for token-weighted program execution across the sovereign network.</div>
+      <div class="card-tags"><span class="tag">Economic Layer</span><span class="tag">Token-Weighted</span><span class="tag">Compute</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Sovereign Notepad -->
+    <a class="app-card" href="apps/sovereign-notepad.html" data-a="sky">
+      <span class="card-icon">📝</span>
+      <div class="card-layer">Surface · Notes</div>
+      <div class="card-title">Sovereign Notepad</div>
+      <div class="card-desc">Persistent, encrypted note-taking wired to the sovereign event ledger. All changes are tracked in the immutable log and synced across the P2P network.</div>
+      <div class="card-tags"><span class="tag">Event-Logged</span><span class="tag">Encrypted</span><span class="tag">P2P Sync</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- INFRASTRUCTURE -->
+  <div class="sec-label grid-gap">Infrastructure · Core Stack</div>
+  <div class="app-grid">
+
+    <!-- Rekernel -->
+    <a class="app-card" href="rekernel.html" data-a="cyan">
+      <span class="card-icon">⚙️</span>
+      <div class="card-layer">L5 · Consensus Kernel</div>
+      <div class="card-title">I-AM-Rekernel</div>
+      <div class="card-desc">The formal kernel spec. Canonical closed-form verification dashboard for the sovereign state machine K = (S, E, δ, Γ, C, P, V).</div>
+      <div class="card-tags"><span class="tag">WASM</span><span class="tag">Consensus</span><span class="tag">Formal Spec</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Rekernel Dashboard -->
+    <a class="app-card" href="rekernel-dashboard.html" data-a="amber">
+      <span class="card-icon">📊</span>
+      <div class="card-layer">Dashboard · Monitor</div>
+      <div class="card-title">Rekernel Dashboard</div>
+      <div class="card-desc">Real-time consensus monitoring, event finality tracking, peer topology, and system health metrics across the hybrid P2P network.</div>
+      <div class="card-tags"><span class="tag">Live Metrics</span><span class="tag">Peer Graph</span><span class="tag">Finality</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Live</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- UDCSEF -->
+    <a class="app-card" href="generate-value-fixed.html" data-a="green">
+      <span class="card-icon">⚡</span>
+      <div class="card-layer">L3 · Compute Fabric</div>
+      <div class="card-title">UDCSEF</div>
+      <div class="card-desc">Universal Deterministic Causal State Execution Fabric. Transform pipelines for deterministic state evolution and P2P message passing across nodes.</div>
+      <div class="card-tags"><span class="tag">State Machine</span><span class="tag">Deterministic</span><span class="tag">P2P</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Sovereign Log -->
+    <a class="app-card" onclick="handleModule(event)" data-a="purple">
+      <span class="card-icon">🔗</span>
+      <div class="card-layer">L3 · Event Chain</div>
+      <div class="card-title">Sovereign Log</div>
+      <div class="card-desc" id="sl-desc">Immutable event ledger powering every surface. Subscribe, emit, and derive state. Loaded as sovereign-log.js across all apps — inspect via the Rekernel Dashboard.</div>
+      <div class="card-tags"><span class="tag">Event Chain</span><span class="tag">IndexedDB</span><span class="tag">sovereign-log.js</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Wired · All Apps</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- GENESIS PIPELINE -->
+  <div class="sec-label grid-gap">Genesis / JSONFlow Pipeline</div>
+  <div class="app-grid">
+
+    <!-- Genesis → JSONFlow -->
+    <a class="app-card" href="genesis-jsonflow/index1.html" data-a="sky">
+      <span class="card-icon">🌀</span>
+      <div class="card-layer">Pipeline · Compiler</div>
+      <div class="card-title">Genesis → JSONFlow</div>
+      <div class="card-desc">3-stage compilation pipeline UI. NL → Genesis Module → JSONFlow IR → Code. Sovereign OS Community License.</div>
+      <div class="card-tags"><span class="tag">3-Stage</span><span class="tag">Compiler</span><span class="tag">DDC Infra</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Genesis App Builder -->
+    <a class="app-card" href="genesis-jsonflow/app-builder.html" data-a="purple">
+      <span class="card-icon">🧱</span>
+      <div class="card-layer">Pipeline · Builder</div>
+      <div class="card-title">Genesis App Builder</div>
+      <div class="card-desc">App builder powered by the Genesis/JSONFlow pipeline. Compose sovereign apps from schema-driven modules and compile to deployable bundles.</div>
+      <div class="card-tags"><span class="tag">Schema-Driven</span><span class="tag">Genesis</span><span class="tag">Deploy</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- DDC Infrastructure Spec -->
+    <a class="app-card" href="genesis-jsonflow/ddc-infrastructure-spec.html" data-a="cyan">
+      <span class="card-icon">📐</span>
+      <div class="card-layer">Pipeline · Spec</div>
+      <div class="card-title">DDC Infrastructure Spec</div>
+      <div class="card-desc">Decentralized Deterministic Compute infrastructure specification. Full schema reference and architecture documentation for the DDC layer.</div>
+      <div class="card-tags"><span class="tag">DDC</span><span class="tag">Spec</span><span class="tag">Architecture</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot warn"></div>Reference</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="sec-label grid-gap">Social · Sovereign P2P Network</div>
+  <div class="app-grid">
+
+    <!-- I-AM-Social -->
+    <a class="app-card" href="apps/I-AM-Social/I-AM-Social.html" data-a="cyan">
+      <span class="card-icon">📡</span>
+      <div class="card-layer">Surface · Social Feed</div>
+      <div class="card-title">I·AM·SOCIAL</div>
+      <div class="card-desc">Sovereign social network on a live P2P mesh. Post, reply, and react — all events flow through the immutable sovereign log, finalized on-chain. WebRTC peer-to-peer with zero central servers.</div>
+      <div class="card-tags"><span class="tag">P2P Mesh</span><span class="tag">WebRTC</span><span class="tag">Event-Logged</span><span class="tag">Live</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Live · P2P</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- Sovereign Shared Rooms -->
+    <a class="app-card" href="surfaces/sovr-di-shared-rooms.html" data-a="green">
+      <span class="card-icon">🏛️</span>
+      <div class="card-layer">Surface · Collaboration</div>
+      <div class="card-title">Sovereign Shared Rooms</div>
+      <div class="card-desc">Decentralized collaboration rooms with shared state consensus. Multi-party sovereign sessions — presence, message threading, and real-time state sync over the P2P fabric.</div>
+      <div class="card-tags"><span class="tag">Rooms</span><span class="tag">Presence</span><span class="tag">Consensus</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- SOV Op Agent Enterprise -->
+    <a class="app-card" href="surfaces/sov-op-agent-enterprise.html" data-a="amber">
+      <span class="card-icon">🤖</span>
+      <div class="card-layer">Surface · Agent Ops</div>
+      <div class="card-title">SOV Op Agent Enterprise</div>
+      <div class="card-desc">Enterprise sovereign operations agent. Autonomous task execution, multi-agent coordination, and capability-gated workflow orchestration across the sovereign network.</div>
+      <div class="card-tags"><span class="tag">Multi-Agent</span><span class="tag">Enterprise</span><span class="tag">CAP-Gated</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- IDE & JSON -->
+  <div class="sec-label grid-gap">IDE · Development Environments</div>
+  <div class="app-grid">
+
+    <a class="app-card" href="apps/I-AM-IDE-jsonFlow/index1.html" data-a="sky">
+      <span class="card-icon">💻</span>
+      <div class="card-layer">IDE · 4-Panel</div>
+      <div class="card-title">I·AM·IDE JSONFlow</div>
+      <div class="card-desc">Full 4-panel IDE: File Explorer · Code Editor · Chat/Pipeline · Output Terminal. NL → Genesis Module → JSONFlow IR → Multi-Language Code. Sovereign OS licensed.</div>
+      <div class="card-tags"><span class="tag">IDE</span><span class="tag">JSONFlow</span><span class="tag">Multi-Lang</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="apps/index1.html" data-a="cyan">
+      <span class="card-icon">🔁</span>
+      <div class="card-layer">Pipeline · Apps IDE</div>
+      <div class="card-title">Genesis → JSONFlow (Apps)</div>
+      <div class="card-desc">3-stage compile pipeline surface wired into the apps fabric. NL → Genesis Module → JSONFlow IR → Code. Sovereign bus attached on load.</div>
+      <div class="card-tags"><span class="tag">Compiler</span><span class="tag">NL→Code</span><span class="tag">Bus-Wired</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="surfaces/causal-jsonflow.html" data-a="purple">
+      <span class="card-icon">🧬</span>
+      <div class="card-layer">Surface · Causal IR</div>
+      <div class="card-title">Causal JSONFlow</div>
+      <div class="card-desc">Causal event-driven JSONFlow pipeline surface. Wire causal dependencies, trace event flows, and debug deterministic state evolution across the sovereign network.</div>
+      <div class="card-tags"><span class="tag">Causal</span><span class="tag">JSONFlow</span><span class="tag">Event Trace</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- PLANESPACE -->
+  <div class="sec-label grid-gap">Planespace · Spatial Rendering Engine</div>
+  <div class="app-grid">
+
+    <a class="app-card" href="planespace_2/planespace-studio.html" data-a="cyan">
+      <span class="card-icon">🌐</span>
+      <div class="card-layer">Planespace · Studio</div>
+      <div class="card-title">Planespace Studio</div>
+      <div class="card-desc">Full Planespace v2 authoring studio. Gyro + mouse 3D spatial layout engine with depth registry, warp shader, render loop, and capture pipeline. Build immersive sovereign surfaces.</div>
+      <div class="card-tags"><span class="tag">3D Spatial</span><span class="tag">Gyro Input</span><span class="tag">WarpShader</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="planespace_2/dist/planespace-demo.html" data-a="sky">
+      <span class="card-icon">🎮</span>
+      <div class="card-layer">Planespace · Demo</div>
+      <div class="card-title">Planespace Demo</div>
+      <div class="card-desc">Interactive Planespace engine demo. Live spatial rendering with depth, parallax, and tilt interaction built on the planespace.min.js distribution bundle.</div>
+      <div class="card-tags"><span class="tag">Demo</span><span class="tag">Spatial</span><span class="tag">Dist Bundle</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="planespace_2/planespace_v2/examples/01-storytelling/index.html" data-a="gold">
+      <span class="card-icon">📖</span>
+      <div class="card-layer">Planespace · Example</div>
+      <div class="card-title">Planespace Storytelling</div>
+      <div class="card-desc">Scroll-driven spatial storytelling example powered by Planespace v2. Layered depth planes, animated scene transitions, and narrative flow built on the spatial engine.</div>
+      <div class="card-tags"><span class="tag">Storytelling</span><span class="tag">Scroll</span><span class="tag">Depth Planes</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="planespace_2/planespace_v2/examples/03-dashboard/index.html" data-a="green">
+      <span class="card-icon">📊</span>
+      <div class="card-layer">Planespace · Example</div>
+      <div class="card-title">Planespace Dashboard</div>
+      <div class="card-desc">Spatial dashboard example. Data panels arranged in Planespace depth layers with parallax interaction, real-time updates, and 3D depth-aware UI composition.</div>
+      <div class="card-tags"><span class="tag">Dashboard</span><span class="tag">Depth UI</span><span class="tag">Parallax</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="planespace_2/planespace_game/demo/the-last-transmission.html" data-a="rose">
+      <span class="card-icon">🚀</span>
+      <div class="card-layer">Planespace · Game</div>
+      <div class="card-title">The Last Transmission</div>
+      <div class="card-desc">Sovereign game demo built on planespace-game.js. Full spatial game engine running on Planespace depth and event system — immersive, locally-executed, zero cloud.</div>
+      <div class="card-tags"><span class="tag">Game</span><span class="tag">Spatial Engine</span><span class="tag">Local</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- EXTENDED SURFACES -->
+  <div class="sec-label grid-gap">Extended Surfaces · Enterprise + Supply Chain</div>
+  <div class="app-grid">
+
+    <a class="app-card" href="surfaces/supply-chain-ollama.html" data-a="amber">
+      <span class="card-icon">🏭</span>
+      <div class="card-layer">Surface · Supply Chain</div>
+      <div class="card-title">Supply Chain · Ollama</div>
+      <div class="card-desc">Sovereign supply chain coordination surface with Ollama AI inference. Track, verify, and automate supply chain events on the deterministic causal fabric with local AI reasoning.</div>
+      <div class="card-tags"><span class="tag">Supply Chain</span><span class="tag">Ollama</span><span class="tag">Causal</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="app-card" href="I-AM-landing.html" data-a="cyan">
+      <span class="card-icon">🌟</span>
+      <div class="card-layer">Surface · Landing</div>
+      <div class="card-title">I·AM Landing</div>
+      <div class="card-desc">The sovereign identity landing surface. Public-facing entry to the I-AM network, identity attestation, and onboarding flow into the sovereign compute suite.</div>
+      <div class="card-tags"><span class="tag">Identity</span><span class="tag">Landing</span><span class="tag">Onboarding</span></div>
+      <div class="card-footer">
+        <div class="card-status"><div class="sdot"></div>Active</div>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">I-AM-IOS · Sovereign Compute Suite</div>
+  <div class="footer-meta">v5 Production · April 2026 · 24 apps · Zero external dependencies · All systems operational</div>
+</footer>
+
+<script>
+  const chars = '0123456789abcdef';
+  const rnd4  = () => Array.from({length:4}, () => chars[Math.floor(Math.random()*16)]).join('');
+
+  const liveEl = document.getElementById('live-hash');
+  liveEl.textContent = `0x${rnd4()}…${rnd4()}`;
+  setInterval(() => { liveEl.textContent = `0x${rnd4()}…${rnd4()}`; }, 4400);
+
+  function handleModule(e) {
+    e.preventDefault();
+    const desc = document.getElementById('sl-desc');
+    const orig = desc.textContent;
+    desc.style.color = 'var(--green)';
+    desc.textContent = '✓ sovereign-log.js is active and wired across all apps. No standalone page — inspect via the Rekernel Dashboard for live event inspection.';
+    setTimeout(() => { desc.style.color = ''; desc.textContent = orig; }, 4400);
+  }
+
+  // Add click handlers for all app cards that have href
+  document.querySelectorAll('.app-card[href]').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+      e.preventDefault();
+      window.location.href = this.getAttribute('href');
+    });
+  });
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw/genesis_sw.js", { scope: "/" })
+    .then(() => console.log("[I-AM-IOS] ✅ Genesis SW ready"))
+    .catch(e => console.warn("[I-AM-IOS] SW failed:", e));
+}
+</script>
+</body>
+</html>

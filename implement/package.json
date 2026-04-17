@@ -1,0 +1,22 @@
+{
+  "name": "i-am-ios-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/sdk",
+    "packages/validator",
+    "packages/relay",
+    "packages/create-i-am-ios-app",
+    "packages/shared",
+    "packages/cli"
+  ],
+  "scripts": {
+    "build":        "npm run build -w packages/sdk",
+    "dev:validator":"npm run dev    -w packages/validator",
+    "dev:relay":    "npm run dev    -w packages/relay",
+    "start":        "npm run start  -w packages/validator & npm run start -w packages/relay",
+    "test":         "npm test --workspaces --if-present"
+  },
+  "engines": { "node": ">=18.0.0" }
+}

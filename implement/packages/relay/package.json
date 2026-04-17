@@ -1,0 +1,13 @@
+{
+  "name": "@i-am-ios/relay",
+  "version": "2.0.0",
+  "description": "I-AM-IOS P2P relay bridge — forwards events between validator and P2P peers",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev":   "node --watch src/index.js"
+  },
+  "engines": { "node": ">=18.0.0" },
+  "license": "MIT"
+}

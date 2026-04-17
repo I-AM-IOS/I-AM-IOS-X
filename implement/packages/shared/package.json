@@ -1,0 +1,10 @@
+{
+  "name": "@i-am-ios/shared",
+  "version": "2.0.0",
+  "description": "I-AM-IOS shared utilities and constants",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": { ".": "./src/index.js" },
+  "scripts": { "test": "node --test src/__tests__/*.test.js" },
+  "license": "MIT"
+}

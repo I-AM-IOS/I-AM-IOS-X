@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  validator:
+    build:
+      context: ./packages/validator
+      dockerfile: Dockerfile
+    container_name: iamios-validator
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - HOST=0.0.0.0
+      - NODE_ENV=production
+      - QUORUM=1
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  relay:
+    build:
+      context: ./packages/relay
+      dockerfile: Dockerfile
+    container_name: iamios-relay
+    ports:
+      - "8091:8091"
+    environment:
+      - PORT=8091
+      - VALIDATOR_ENDPOINT=http://validator:8080
+    depends_on:
+      validator:
+        condition: service_healthy
+    restart: unless-stopped
